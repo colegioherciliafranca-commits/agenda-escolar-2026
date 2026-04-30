@@ -787,18 +787,11 @@
         const weekDays = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
 
         async function initCalendar() {
-            // Load events from Appwrite
-            const appwriteEvents = await loadEventsFromAppwrite();
+            // Load events from Appwrite only (100% cloud)
+            events = await loadEventsFromAppwrite();
             
-            // Merge with localStorage for backward compatibility
-            const savedEvents = localStorage.getItem('schoolEvents');
-            if (savedEvents) {
-                const localEvents = JSON.parse(savedEvents);
-                // Merge events, giving priority to Appwrite
-                events = { ...localEvents, ...appwriteEvents };
-            } else {
-                events = appwriteEvents;
-            }
+            // Clear localStorage to avoid conflicts
+            localStorage.removeItem('schoolEvents');
             
             document.getElementById('monthSelect').value = currentMonth;
             renderCalendar();
@@ -1031,18 +1024,16 @@
                 const value = input.value.trim();
                 if (value) {
                     events[dateStr][events[dateStr].length - 1].title = value;
-                    // Save to Appwrite
+                    // Save to Appwrite only
                     const response = await saveEventToAppwrite(dateStr, value);
                     if (response) {
                         events[dateStr][events[dateStr].length - 1].id = response.$id;
                     }
-                    localStorage.setItem('schoolEvents', JSON.stringify(events));
                 } else {
                     events[dateStr].pop();
                     if (events[dateStr].length === 0) {
                         delete events[dateStr];
                     }
-                    localStorage.setItem('schoolEvents', JSON.stringify(events));
                 }
                 renderCalendar();
             });
@@ -1104,7 +1095,6 @@
                 delete events[dateStr];
             }
             
-            localStorage.setItem('schoolEvents', JSON.stringify(events));
             renderCalendar();
         }
 
@@ -1142,13 +1132,14 @@
             }
         });
 
-        // Configuração Appwrite
-        const client = new Appwrite();
-        client
+        // Configuração Appwrite - SDK v13 correto
+        const { Client, Databases, ID } = Appwrite;
+        
+        const client = new Client()
             .setEndpoint('https://nyc.cloud.appwrite.io/v1')
             .setProject('agenda-escolar-2026');
 
-        const databases = new Appwrite.Databases(client);
+        const databases = new Databases(client);
         
         // IDs corretos do Appwrite
         const DATABASE_ID = '69f38f600004d1b7c5ce';
@@ -1187,7 +1178,7 @@
                 const response = await databases.createDocument(
                     DATABASE_ID,
                     COLLECTION_ID,
-                    Appwrite.ID.unique(),
+                    ID.unique(),
                     {
                         data: date,
                         texto: title,
