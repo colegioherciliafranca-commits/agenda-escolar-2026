@@ -1,0 +1,113 @@
+# Arquivos temporários e backups
+*.tmp
+*.bak
+*.backup
+*~
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Dependências Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Ambiente virtual
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDEs e editores
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Arquivos de sistema
+*.lnk
+
+# Arquivos gerados automaticamente
+dist/
+build/
+out/
+
+# Cache
+.cache/
+.parcel-cache/
+
+# Arquivos de configuração locais
+config.local.js
+config.local.json
+
+# Tokens e chaves (segurança)
+*.token
+*.key
+*.pem
+*.p12
+secrets/
+credentials/
+
+# Uploads e arquivos temporários
+uploads/
+temp/
+tmp/
+
+# Arquivos de teste
+test_*.html
+*_test.*
+*.test.*
+
+# Documentação desnecessária para o deploy
+docs/
+*.md
+!README.md
+
+# Scripts de desenvolvimento e deploy
+*.ps1
+*.py
+!requirements.txt
+package.json
+package-lock.json
+
+# Arquivos de imagem vazios ou temporários
+*.png
+*.jpg
+*.jpeg
+*.gif
+!banner_*
+
+# Servidores locais
+server.js
+simple_server.py
+server_local.py
+
+# Integrações e APIs
+handtalk_integration*
+vlibras_service*
+test_*.py
+
+# Arquivos específicos do projeto que não devem ir para GitHub
+avatar_*
+ppt_libras_*
+sistema_*
+tradutor_*
+vlibras_*
