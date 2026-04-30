@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Real VLibras</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f0f0f0;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .test-section {
+            margin: 30px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        
+        .test-section h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        
+        textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+        
+        button:hover {
+            background: #5a67d8;
+        }
+        
+        .status {
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+        
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .status.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        
+        .debug-log {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: monospace;
+            font-size: 14px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .instructions {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .instructions h4 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+        
+        .instructions p {
+            color: #856404;
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Teste Real do Avatar VLibras</h1>
+        
+        <div class="test-section">
+            <h3>1. Verificação de Carregamento</h3>
+            <div id="loadingStatus" class="status info">Verificando...</div>
+            <div id="debugLog" class="debug-log">Iniciando diagnóstico...</div>
+        </div>
+        
+        <div class="test-section">
+            <h3>2. Teste de Tradução</h3>
+            <textarea id="testText" placeholder="Digite um texto para testar...">Bom dia a todos. Esta é uma mensagem de teste para o VLibras.</textarea>
+            <button onclick="testVLibras()">Testar VLibras</button>
+            <button onclick="testManual()">Teste Manual</button>
+            <div id="testStatus" class="status info">Aguardando teste...</div>
+        </div>
+        
+        <div class="instructions">
+            <h4>Como Verificar se Funciona:</h4>
+            <p>1. Após clicar em "Testar VLibras", aguarde 3-5 segundos</p>
+            <p>2. Procure no canto inferior direito um botão com duas mãos</p>
+            <p>3. Clique nesse botão para ver o avatar 3D</p>
+            <p>4. O avatar deve aparecer traduzindo o texto em Libras</p>
+        </div>
+        
+        <div class="test-section">
+            <h3>3. Informações do Sistema</h3>
+            <div id="systemInfo">
+                <p><strong>Navegador:</strong> <span id="browserInfo"></span></p>
+                <p><strong>VLibras Carregado:</strong> <span id="vlibrasLoaded">Verificando...</span></p>
+                <p><strong>Script URL:</strong> <span id="scriptUrl"></span></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- VLibras Widget - Implementação Oficial -->
+    <div vw class="enabled">
+        <div vw-access-button class="active"></div>
+        <div vw-plugin-wrapper>
+            <div vw-plugin-name="VP">
+                <p id="vlibrasContent">Mensagem inicial de teste</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let testCount = 0;
+        
+        function log(message) {
+            testCount++;
+            const timestamp = new Date().toLocaleTimeString();
+            const debugLog = document.getElementById('debugLog');
+            debugLog.innerHTML += `<br>[${timestamp}] ${testCount}. ${message}`;
+            debugLog.scrollTop = debugLog.scrollHeight;
+        }
+        
+        function updateStatus(elementId, message, type) {
+            const element = document.getElementById(elementId);
+            element.textContent = message;
+            element.className = `status ${type}`;
+        }
+        
+        function updateSystemInfo() {
+            document.getElementById('browserInfo').textContent = navigator.userAgent;
+            document.getElementById('scriptUrl').textContent = 'https://vlibras.gov.br/app/vlibras-plugin.js';
+            
+            // Verificar VLibras
+            const checkInterval = setInterval(() => {
+                if (window.VLibras) {
+                    document.getElementById('vlibrasLoaded').textContent = 'SIM';
+                    updateStatus('loadingStatus', 'VLibras carregado com sucesso!', 'success');
+                    log('VLibras detectado e disponível');
+                    clearInterval(checkInterval);
+                } else {
+                    document.getElementById('vlibrasLoaded').textContent = 'NÃO';
+                }
+            }, 1000);
+        }
+        
+        function testVLibras() {
+            const text = document.getElementById('testText').value.trim();
+            if (!text) {
+                updateStatus('testStatus', 'Digite um texto para testar', 'error');
+                return;
+            }
+            
+            updateStatus('testStatus', 'Executando teste...', 'info');
+            log(`Iniciando teste com texto: "${text.substring(0, 30)}..."`);
+            
+            // Atualizar conteúdo
+            document.getElementById('vlibrasContent').textContent = text;
+            log('Conteúdo do VLibras atualizado');
+            
+            // Tentar inicializar
+            try {
+                if (window.VLibras) {
+                    log('VLibras disponível, tentando inicializar...');
+                    new window.VLibras.Widget('https://vlibras.gov.br/app');
+                    log('VLibras inicializado com sucesso');
+                    updateStatus('testStatus', 'Teste concluído! Procure o botão VLibras no canto inferior direito.', 'success');
+                    
+                    setTimeout(() => {
+                        log('Botão VLibras deve aparecer em 3-5 segundos...');
+                        log('PROCURAR: Botão com duas mãos no canto inferior direito!');
+                    }, 2000);
+                } else {
+                    log('ERRO: VLibras não disponível');
+                    updateStatus('testStatus', 'ERRO: VLibras não carregado', 'error');
+                }
+            } catch (error) {
+                log(`ERRO: ${error.message}`);
+                updateStatus('testStatus', `ERRO: ${error.message}`, 'error');
+            }
+        }
+        
+        function testManual() {
+            log('Iniciando teste manual...');
+            
+            // Verificar se VLibras está disponível
+            if (window.VLibras) {
+                log('VLibras está disponível');
+                try {
+                    // Criar nova instância manualmente
+                    log('Criando instância manual do VLibras...');
+                    new window.VLibras.Widget('https://vlibras.gov.br/app');
+                    log('Instância criada com sucesso');
+                    updateStatus('testStatus', 'Teste manual concluído!', 'success');
+                } catch (error) {
+                    log(`ERRO no teste manual: ${error.message}`);
+                    updateStatus('testStatus', `ERRO manual: ${error.message}`, 'error');
+                }
+            } else {
+                log('VLibras não está disponível para teste manual');
+                updateStatus('testStatus', 'VLibras não disponível', 'error');
+            }
+        }
+        
+        // Inicialização
+        window.addEventListener('load', function() {
+            log('Página carregada');
+            updateSystemInfo();
+            
+            // Verificar carregamento do script
+            setTimeout(() => {
+                if (window.VLibras) {
+                    log('VLibras detectado após carregamento da página');
+                    updateStatus('loadingStatus', 'VLibras carregado automaticamente', 'success');
+                } else {
+                    log('VLibras não detectado após carregamento');
+                    updateStatus('loadingStatus', 'VLibras não carregado', 'error');
+                }
+            }, 3000);
+        });
+        
+        // Log contínuo
+        setInterval(() => {
+            if (window.VLibras) {
+                log('Status: VLibras disponível');
+            } else {
+                log('Status: VLibras não disponível');
+            }
+        }, 10000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agenda Escolar 2026 - Colégio Estadual Profª Hercília F do Nascimento</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #FF6B6B 0%, #4ECDC4 50%, #45B7D1 100%);
+            color: white;
+            padding: 0;
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            z-index: 1;
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -5%;
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 50%;
+            z-index: 1;
+        }
+
+        .banner-content {
+            position: relative;
+            z-index: 2;
+            padding: 30px;
+        }
+
+        .banner-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .banner-left {
+            flex: 1;
+        }
+
+        .school-info h3 {
+            font-size: 1.2em;
+            margin-bottom: 5px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            font-weight: bold;
+        }
+
+        .school-info p {
+            font-size: 0.9em;
+            opacity: 0.9;
+            margin: 0;
+        }
+
+        .banner-right {
+            flex: 1;
+            text-align: right;
+        }
+
+        .parana-logo {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px 20px;
+            border-radius: 25px;
+            display: inline-block;
+            font-weight: bold;
+            font-size: 1.1em;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .banner-title {
+            text-align: center;
+            margin: 30px 0;
+            position: relative;
+        }
+
+        .banner-title h1 {
+            font-size: 3.5em;
+            font-weight: 900;
+            text-transform: uppercase;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.4);
+            margin: 0;
+            background: linear-gradient(45deg, #FFD700, #FFA500, #FF6347);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+            display: inline-block;
+        }
+
+        .banner-title h1::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -20px;
+            right: -20px;
+            bottom: -10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            z-index: -1;
+            transform: rotate(-2deg);
+        }
+
+        .banner-bottom {
+            margin-top: 20px;
+        }
+
+        .contact-info {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .contact-info p {
+            margin: 5px 0;
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+
+        .contact-info strong {
+            color: #FFD700;
+            font-weight: bold;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .legend {
+            background: #f8f9fa;
+            padding: 20px;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .legend h3 {
+            margin-bottom: 15px;
+            color: #2c3e50;
+            font-size: 1.3em;
+        }
+
+        .legend-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            padding: 5px;
+            border-radius: 5px;
+            transition: transform 0.2s;
+        }
+
+        .legend-item:hover {
+            transform: translateX(5px);
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 3px;
+            margin-right: 10px;
+            border: 1px solid #333;
+        }
+
+        .controls {
+            padding: 20px;
+            background: #f8f9fa;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .month-selector {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .month-selector select {
+            padding: 10px 15px;
+            border: 2px solid #3498db;
+            border-radius: 8px;
+            font-size: 16px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .month-selector select:hover {
+            border-color: #2980b9;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .btn-primary {
+            background: #3498db;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+        }
+
+        .calendar-container {
+            padding: 30px;
+        }
+
+        .calendar {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .calendar-header {
+            background: #34495e;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+        }
+
+        .weekday {
+            background: #2c3e50;
+            color: white;
+            padding: 15px 5px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .calendar-day {
+            min-height: 80px;
+            border: 1px solid #dee2e6;
+            padding: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            background: white;
+        }
+
+        .calendar-day:hover {
+            background: #f8f9fa;
+            transform: scale(1.05);
+            z-index: 10;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .day-number {
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+        }
+
+        .event-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin: 2px;
+            display: inline-block;
+        }
+
+        .meeting-item {
+            background: rgba(0, 206, 209, 0.1);
+            border: 1px solid rgba(0, 206, 209, 0.3);
+            border-radius: 4px;
+            padding: 2px 4px;
+            margin: 2px 0;
+            font-size: 0.75em;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .meeting-item:hover {
+            background: rgba(0, 206, 209, 0.2);
+            border-color: rgba(0, 206, 209, 0.5);
+        }
+
+        .meeting-item.editing {
+            background: white;
+            border-color: #00CED1;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .meeting-input {
+            width: 100%;
+            border: none;
+            background: transparent;
+            font-size: 0.75em;
+            padding: 2px;
+            outline: none;
+            font-family: inherit;
+        }
+
+        .meeting-delete {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            font-size: 10px;
+            cursor: pointer;
+            display: none;
+            line-height: 1;
+        }
+
+        .meeting-item:hover .meeting-delete {
+            display: block;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: white;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            animation: slideIn 0.3s;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        .modal-header h2 {
+            color: #2c3e50;
+            font-size: 1.5em;
+        }
+
+        .close {
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #aaa;
+            transition: color 0.3s;
+        }
+
+        .close:hover {
+            color: #000;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .event-list {
+            margin-top: 20px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .event-item {
+            background: #f8f9fa;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+            transition: transform 0.2s;
+        }
+
+        .event-item:hover {
+            transform: translateX(5px);
+        }
+
+        .event-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .event-description {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .event-actions {
+            margin-top: 10px;
+        }
+
+        .btn-small {
+            padding: 5px 10px;
+            font-size: 12px;
+            margin-right: 5px;
+        }
+
+        .btn-danger {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+
+        /* Cores específicas do calendário */
+        .color-yellow { background-color: #FFD700 !important; }
+        .color-blue { background-color: #4169E1 !important; }
+        .color-light-green { background-color: #90EE90 !important; }
+        .color-dark-green { background-color: #228B22 !important; }
+        .color-black { background-color: #2c3e50 !important; color: white; }
+        .color-red { background-color: #DC143C !important; color: white; }
+        .color-orange { background-color: #FF8C00 !important; }
+        .color-light-blue { background-color: #87CEEB !important; }
+        .color-pink { background-color: #FFB6C1 !important; }
+        .color-purple { background-color: #9370DB !important; }
+        .color-cyan { background-color: #00CED1 !important; }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 10px;
+            }
+            
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .legend-items {
+                grid-template-columns: 1fr;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .calendar-day {
+                min-height: 60px;
+                font-size: 0.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="banner-content">
+                <div class="banner-top">
+                    <div class="banner-left">
+                        <div class="school-info">
+                            <h3>COLÉGIO ESTADUAL PROFª HERCÍLIA F DO NASCIMENTO -EFMP</h3>
+                            <p>Mangueirinha - PR</p>
+                        </div>
+                    </div>
+                    <div class="banner-right">
+                        <div class="parana-logo">
+                            <span>PARANÁ INTEGRAL</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="banner-title">
+                    <h1>AGENDA ESCOLAR 2026</h1>
+                </div>
+                <div class="banner-bottom">
+                    <div class="contact-info">
+                        <p><strong>Telefone:</strong> (46)3243-1271</p>
+                        <p><strong>E-mail:</strong> mulhercilianascimento@seed.pr.gov.br</p>
+                        <p><strong>Endereço:</strong> Rua Governador Garcés, nº 674, Bairro Vila Verde, 85540-000 - Mangueirinha - PR</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="legend">
+            <h3>Legenda de Cores</h3>
+            <div class="legend-items">
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #FFD700;"></div>
+                    <span>Continuidade das férias</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #4169E1;"></div>
+                    <span>Início e término das aulas</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #90EE90;"></div>
+                    <span>Início e término de trimestre</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #228B22;"></div>
+                    <span>Estudo e Planejamento</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #2c3e50;"></div>
+                    <span>Plano de Abandono</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #DC143C;"></div>
+                    <span>Feriado</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #FF8C00;"></div>
+                    <span>Recesso escolar</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #87CEEB;"></div>
+                    <span>Cons. Clas. Extraord. e Fech.</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #FFB6C1;"></div>
+                    <span>Início das férias 2027</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #9370DB;"></div>
+                    <span>Conselho de Classe (Intermediário)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #00CED1;"></div>
+                    <span>Reunião</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <div class="month-selector">
+                <label for="monthSelect">Mês:</label>
+                <select id="monthSelect">
+                    <option value="0">Janeiro</option>
+                    <option value="1">Fevereiro</option>
+                    <option value="2">Março</option>
+                    <option value="3">Abril</option>
+                    <option value="4">Maio</option>
+                    <option value="5">Junho</option>
+                    <option value="6">Julho</option>
+                    <option value="7">Agosto</option>
+                    <option value="8">Setembro</option>
+                    <option value="9">Outubro</option>
+                    <option value="10">Novembro</option>
+                    <option value="11">Dezembro</option>
+                </select>
+            </div>
+            <button class="btn btn-primary" onclick="goToToday()">Hoje</button>
+        </div>
+
+        <div class="calendar-container">
+            <div class="calendar">
+                <div class="calendar-header" id="calendarHeader">Janeiro 2026</div>
+                <div class="calendar-grid" id="calendarGrid">
+                    <!-- Calendar will be generated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for adding/editing events -->
+    <div id="eventModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Adicionar Compromisso</h2>
+                <span class="close" onclick="closeModal()">&times;</span>
+            </div>
+            <form id="eventForm">
+                <div class="form-group">
+                    <label for="eventTitle">Título:</label>
+                    <input type="text" id="eventTitle" required>
+                </div>
+                <div class="form-group">
+                    <label for="eventDescription">Descrição:</label>
+                    <textarea id="eventDescription"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="eventType">Tipo de Evento:</label>
+                    <select id="eventType">
+                        <option value="">Selecione...</option>
+                        <option value="yellow">Continuidade das férias</option>
+                        <option value="blue">Início e término das aulas</option>
+                        <option value="light-green">Início e término de trimestre</option>
+                        <option value="dark-green">Estudo e Planejamento</option>
+                        <option value="black">Plano de Abandono</option>
+                        <option value="red">Feriado</option>
+                        <option value="orange">Recesso escolar</option>
+                        <option value="light-blue">Cons. Clas. Extraord. e Fech.</option>
+                        <option value="pink">Início das férias 2027</option>
+                        <option value="purple">Conselho de Classe (Intermediário)</option>
+                        <option value="cyan">Reunião</option>
+                        <option value="">Compromisso pessoal</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </div>
+            </form>
+            <div class="event-list" id="eventList">
+                <!-- Events will be listed here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dados do calendário escolar 2026 baseado na imagem
+        const calendarData = {
+            holidays: {
+                '2026-01-01': { type: 'red', title: 'Ano Novo' },
+                '2026-02-16': { type: 'orange', title: 'Carnaval' },
+                '2026-02-17': { type: 'orange', title: 'Carnaval' },
+                '2026-02-18': { type: 'orange', title: 'Carnaval' },
+                '2026-04-21': { type: 'red', title: 'Tiradentes' },
+                '2026-05-01': { type: 'red', title: 'Dia do Trabalho' },
+                '2026-06-11': { type: 'red', title: 'Corpus Christi' },
+                '2026-09-07': { type: 'red', title: 'Independência' },
+                '2026-10-12': { type: 'red', title: 'Nossa Senhora Aparecida' },
+                '2026-10-15': { type: 'red', title: 'Dia do Professor' },
+                '2026-11-02': { type: 'red', title: 'Finados' },
+                '2026-11-15': { type: 'red', title: 'Proclamação da República' },
+                '2026-12-25': { type: 'red', title: 'Natal' }
+            },
+            schoolEvents: {
+                '2026-01-05': { type: 'blue', title: 'Início das aulas' },
+                '2026-01-06': { type: 'blue', title: 'Aulas' },
+                '2026-01-07': { type: 'blue', title: 'Aulas' },
+                '2026-01-08': { type: 'blue', title: 'Aulas' },
+                '2026-01-09': { type: 'blue', title: 'Aulas' },
+                '2026-01-10': { type: 'blue', title: 'Aulas' },
+                '2026-01-11': { type: 'blue', title: 'Aulas' },
+                '2026-01-12': { type: 'blue', title: 'Aulas' },
+                '2026-01-13': { type: 'blue', title: 'Aulas' },
+                '2026-01-14': { type: 'blue', title: 'Aulas' },
+                '2026-01-15': { type: 'blue', title: 'Aulas' },
+                '2026-01-16': { type: 'blue', title: 'Aulas' },
+                '2026-01-17': { type: 'blue', title: 'Aulas' },
+                '2026-01-18': { type: 'blue', title: 'Aulas' },
+                '2026-01-19': { type: 'blue', title: 'Aulas' },
+                '2026-01-20': { type: 'blue', title: 'Aulas' },
+                '2026-01-21': { type: 'blue', title: 'Aulas' },
+                '2026-01-22': { type: 'blue', title: 'Aulas' },
+                '2026-01-23': { type: 'blue', title: 'Aulas' },
+                '2026-01-24': { type: 'blue', title: 'Aulas' },
+                '2026-01-25': { type: 'blue', title: 'Aulas' },
+                '2026-01-26': { type: 'blue', title: 'Aulas' },
+                '2026-01-27': { type: 'blue', title: 'Aulas' },
+                '2026-01-28': { type: 'blue', title: 'Aulas' },
+                '2026-01-29': { type: 'blue', title: 'Aulas' },
+                '2026-01-30': { type: 'dark-green', title: 'Estudo e Planejamento' },
+                '2026-01-31': { type: 'dark-green', title: 'Estudo e Planejamento' },
+                '2026-04-09': { type: 'light-green', title: 'Fim do 1º Trimestre' },
+                '2026-04-10': { type: 'purple', title: 'Conselho de Classe' },
+                '2026-04-11': { type: 'light-green', title: 'Início do 2º Trimestre' },
+                '2026-06-30': { type: 'light-green', title: 'Fim do 2º Trimestre' },
+                '2026-07-01': { type: 'purple', title: 'Conselho de Classe' },
+                '2026-07-02': { type: 'light-green', title: 'Início do 3º Trimestre' },
+                '2026-12-10': { type: 'light-green', title: 'Fim do 3º Trimestre' },
+                '2026-12-11': { type: 'purple', title: 'Conselho de Classe' },
+                '2026-12-12': { type: 'light-blue', title: 'Conselho de Classe Extraordinário' },
+                '2026-12-13': { type: 'light-blue', title: 'Fechamento do Ano Letivo' },
+                '2026-12-14': { type: 'pink', title: 'Início das Férias 2027' }
+            }
+        };
+
+        let currentMonth = new Date().getMonth();
+        let currentYear = 2026;
+        let selectedDate = null;
+        let events = JSON.parse(localStorage.getItem('schoolEvents')) || {};
+
+        const monthNames = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 
+                          'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+        const weekDays = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+
+        function initCalendar() {
+            document.getElementById('monthSelect').value = currentMonth;
+            renderCalendar();
+        }
+
+        function renderCalendar() {
+            const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+            const calendarGrid = document.getElementById('calendarGrid');
+            const calendarHeader = document.getElementById('calendarHeader');
+            
+            calendarHeader.textContent = `${monthNames[currentMonth]} ${currentYear}`;
+            calendarGrid.innerHTML = '';
+
+            // Add weekday headers
+            weekDays.forEach(day => {
+                const dayElement = document.createElement('div');
+                dayElement.className = 'weekday';
+                dayElement.textContent = day;
+                calendarGrid.appendChild(dayElement);
+            });
+
+            // Add empty cells for days before month starts
+            for (let i = 0; i < firstDay; i++) {
+                const emptyDay = document.createElement('div');
+                emptyDay.className = 'calendar-day';
+                calendarGrid.appendChild(emptyDay);
+            }
+
+            // Add days of the month
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-day';
+                dayElement.dataset.date = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                
+                const dayNumber = document.createElement('div');
+                dayNumber.className = 'day-number';
+                dayNumber.textContent = day;
+                dayElement.appendChild(dayNumber);
+
+                // Check for predefined events
+                const dateStr = dayElement.dataset.date;
+                const holiday = calendarData.holidays[dateStr];
+                const schoolEvent = calendarData.schoolEvents[dateStr];
+                const userEvents = events[dateStr] || [];
+
+                if (holiday) {
+                    dayElement.classList.add(`color-${holiday.type}`);
+                    dayElement.title = holiday.title;
+                }
+
+                if (schoolEvent) {
+                    dayElement.classList.add(`color-${schoolEvent.type}`);
+                    dayElement.title = schoolEvent.title;
+                }
+
+                // Add event indicators for official events
+                const officialEvents = [];
+                if (holiday) officialEvents.push(holiday);
+                if (schoolEvent) officialEvents.push(schoolEvent);
+
+                if (officialEvents.length > 0) {
+                    const indicatorContainer = document.createElement('div');
+                    officialEvents.slice(0, 3).forEach(event => {
+                        if (event.type) {
+                            const indicator = document.createElement('span');
+                            indicator.className = `event-indicator color-${event.type}`;
+                            indicatorContainer.appendChild(indicator);
+                        }
+                    });
+                    dayElement.appendChild(indicatorContainer);
+                }
+
+                // Add meetings inline
+                const meetings = userEvents.filter(event => !event.type || event.type === 'cyan');
+                if (meetings.length > 0) {
+                    const meetingContainer = document.createElement('div');
+                    meetingContainer.className = 'meeting-container';
+                    meetings.forEach((meeting, index) => {
+                        const meetingItem = document.createElement('div');
+                        meetingItem.className = 'meeting-item';
+                        meetingItem.innerHTML = `
+                            <span class="meeting-text">${meeting.title}</span>
+                            <button class="meeting-delete" onclick="deleteMeeting('${dateStr}', ${index})">×</button>
+                        `;
+                        meetingItem.addEventListener('click', (e) => {
+                            if (!e.target.classList.contains('meeting-delete')) {
+                                editMeetingInline(meetingItem, dateStr, index);
+                            }
+                        });
+                        meetingContainer.appendChild(meetingItem);
+                    });
+                    dayElement.appendChild(meetingContainer);
+                }
+
+                // Add click to add new meeting
+                dayElement.addEventListener('click', (e) => {
+                    if (!e.target.closest('.meeting-item') && !e.target.closest('.event-indicator')) {
+                        addNewMeetingInline(dateStr, dayElement);
+                    }
+                });
+                calendarGrid.appendChild(dayElement);
+            }
+        }
+
+        function openModal(dateStr) {
+            selectedDate = dateStr;
+            const modal = document.getElementById('eventModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const eventList = document.getElementById('eventList');
+            
+            modalTitle.textContent = `Compromissos - ${formatDate(dateStr)}`;
+            
+            // Display existing events
+            eventList.innerHTML = '';
+            const dayEvents = events[dateStr] || [];
+            const holiday = calendarData.holidays[dateStr];
+            const schoolEvent = calendarData.schoolEvents[dateStr];
+
+            if (holiday) {
+                const eventItem = createEventItem(holiday.title, 'Feriado escolar', holiday.type, true);
+                eventList.appendChild(eventItem);
+            }
+
+            if (schoolEvent) {
+                const eventItem = createEventItem(schoolEvent.title, 'Evento escolar', schoolEvent.type, true);
+                eventList.appendChild(eventItem);
+            }
+
+            dayEvents.forEach((event, index) => {
+                const eventItem = createEventItem(event.title, event.description, event.type, false, index);
+                eventList.appendChild(eventItem);
+            });
+
+            modal.style.display = 'block';
+        }
+
+        function createEventItem(title, description, type, isReadOnly, index = null) {
+            const eventItem = document.createElement('div');
+            eventItem.className = 'event-item';
+            if (type) {
+                eventItem.style.borderLeftColor = getColorCode(type);
+            }
+            
+            eventItem.innerHTML = `
+                <div class="event-title">${title}</div>
+                <div class="event-description">${description}</div>
+                ${!isReadOnly ? `<div class="event-actions">
+                    <button class="btn btn-small btn-danger" onclick="deleteEvent(${index})">Excluir</button>
+                </div>` : ''}
+            `;
+            
+            return eventItem;
+        }
+
+        function getColorCode(type) {
+            const colorMap = {
+                'yellow': '#FFD700',
+                'blue': '#4169E1',
+                'light-green': '#90EE90',
+                'dark-green': '#228B22',
+                'black': '#2c3e50',
+                'red': '#DC143C',
+                'orange': '#FF8C00',
+                'light-blue': '#87CEEB',
+                'pink': '#FFB6C1',
+                'purple': '#9370DB',
+                'cyan': '#00CED1'
+            };
+            return colorMap[type] || '#3498db';
+        }
+
+        function closeModal() {
+            document.getElementById('eventModal').style.display = 'none';
+            document.getElementById('eventForm').reset();
+        }
+
+        function formatDate(dateStr) {
+            const [year, month, day] = dateStr.split('-');
+            return `${day}/${month}/${year}`;
+        }
+
+        function deleteEvent(index) {
+            if (!selectedDate) return;
+            
+            if (!events[selectedDate]) events[selectedDate] = [];
+            events[selectedDate].splice(index, 1);
+            
+            if (events[selectedDate].length === 0) {
+                delete events[selectedDate];
+            }
+            
+            localStorage.setItem('schoolEvents', JSON.stringify(events));
+            openModal(selectedDate); // Refresh modal
+            renderCalendar();
+        }
+
+        function goToToday() {
+            const today = new Date();
+            currentMonth = today.getMonth();
+            currentYear = today.getFullYear();
+            document.getElementById('monthSelect').value = currentMonth;
+            renderCalendar();
+        }
+
+        function addNewMeetingInline(dateStr, dayElement) {
+            if (!events[dateStr]) {
+                events[dateStr] = [];
+            }
+            
+            const newMeeting = { title: '', description: '', type: 'cyan' };
+            events[dateStr].push(newMeeting);
+            
+            const meetingContainer = dayElement.querySelector('.meeting-container') || document.createElement('div');
+            if (!dayElement.contains(meetingContainer)) {
+                dayElement.appendChild(meetingContainer);
+            }
+            
+            const meetingItem = document.createElement('div');
+            meetingItem.className = 'meeting-item editing';
+            meetingItem.innerHTML = `
+                <input type="text" class="meeting-input" placeholder="Digite a reunião..." value="">
+                <button class="meeting-delete" onclick="deleteMeeting('${dateStr}', ${events[dateStr].length - 1})">×</button>
+            `;
+            
+            const input = meetingItem.querySelector('.meeting-input');
+            input.focus();
+            
+            input.addEventListener('blur', () => {
+                const value = input.value.trim();
+                if (value) {
+                    events[dateStr][events[dateStr].length - 1].title = value;
+                    localStorage.setItem('schoolEvents', JSON.stringify(events));
+                } else {
+                    events[dateStr].pop();
+                    if (events[dateStr].length === 0) {
+                        delete events[dateStr];
+                    }
+                    localStorage.setItem('schoolEvents', JSON.stringify(events));
+                }
+                renderCalendar();
+            });
+            
+            input.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    input.blur();
+                }
+            });
+            
+            meetingContainer.appendChild(meetingItem);
+        }
+
+        function editMeetingInline(meetingItem, dateStr, index) {
+            const currentText = meetingItem.querySelector('.meeting-text').textContent;
+            meetingItem.classList.add('editing');
+            meetingItem.innerHTML = `
+                <input type="text" class="meeting-input" value="${currentText}">
+                <button class="meeting-delete" onclick="deleteMeeting('${dateStr}', ${index})">×</button>
+            `;
+            
+            const input = meetingItem.querySelector('.meeting-input');
+            input.focus();
+            input.select();
+            
+            input.addEventListener('blur', () => {
+                const value = input.value.trim();
+                if (value) {
+                    events[dateStr][index].title = value;
+                    localStorage.setItem('schoolEvents', JSON.stringify(events));
+                } else {
+                    deleteMeeting(dateStr, index);
+                }
+                renderCalendar();
+            });
+            
+            input.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    input.blur();
+                }
+            });
+        }
+
+        function deleteMeeting(dateStr, index) {
+            if (!events[dateStr]) return;
+            
+            events[dateStr].splice(index, 1);
+            
+            if (events[dateStr].length === 0) {
+                delete events[dateStr];
+            }
+            
+            localStorage.setItem('schoolEvents', JSON.stringify(events));
+            renderCalendar();
+        }
+
+        // Event listeners
+        document.getElementById('monthSelect').addEventListener('change', (e) => {
+            currentMonth = parseInt(e.target.value);
+            renderCalendar();
+        });
+
+        document.getElementById('eventForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            if (!selectedDate) return;
+            
+            const title = document.getElementById('eventTitle').value;
+            const description = document.getElementById('eventDescription').value;
+            const type = document.getElementById('eventType').value;
+            
+            if (!events[selectedDate]) {
+                events[selectedDate] = [];
+            }
+            
+            events[selectedDate].push({ title, description, type });
+            localStorage.setItem('schoolEvents', JSON.stringify(events));
+            
+            closeModal();
+            renderCalendar();
+        });
+
+        // Close modal when clicking outside
+        window.addEventListener('click', (e) => {
+            const modal = document.getElementById('eventModal');
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+
+        // Initialize calendar when page loads
+        document.addEventListener('DOMContentLoaded', initCalendar);
+    </script>
+</body>
+</html>

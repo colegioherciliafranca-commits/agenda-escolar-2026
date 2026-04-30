@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tradutor Libras Alternativo - Funcional</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .text-area {
+            width: 100%;
+            min-height: 120px;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            margin-bottom: 20px;
+            resize: vertical;
+        }
+        
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            background: #5a67d8;
+        }
+        
+        .btn-success {
+            background: #28a745;
+        }
+        
+        .btn-success:hover {
+            background: #218838;
+        }
+        
+        .btn-warning {
+            background: #ffc107;
+            color: #212529;
+        }
+        
+        .btn-warning:hover {
+            background: #e0a800;
+        }
+        
+        .status {
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-weight: bold;
+        }
+        
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .status.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        
+        .libras-display {
+            background: #f8f9fa;
+            border: 3px solid #28a745;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            margin: 20px 0;
+            min-height: 300px;
+        }
+        
+        .libras-text {
+            font-size: 24px;
+            color: #155724;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        
+        .libras-gloss {
+            font-size: 18px;
+            color: #0c5460;
+            font-style: italic;
+            margin: 15px 0;
+            background: #e2e3e5;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        
+        .hand-animation {
+            display: inline-block;
+            font-size: 48px;
+            margin: 20px;
+            animation: wave 2s infinite;
+        }
+        
+        @keyframes wave {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-20deg); }
+            75% { transform: rotate(20deg); }
+        }
+        
+        .instructions {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .instructions h4 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+        
+        .instructions p {
+            color: #856404;
+            margin: 8px 0;
+        }
+        
+        .word-breakdown {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0;
+            justify-content: center;
+        }
+        
+        .word-card {
+            background: #e8f5e8;
+            border: 2px solid #28a745;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            min-width: 120px;
+        }
+        
+        .word-card .portuguese {
+            font-weight: bold;
+            color: #155724;
+            margin-bottom: 5px;
+        }
+        
+        .word-card .libras {
+            color: #0c5460;
+            font-style: italic;
+        }
+        
+        .avatar-placeholder {
+            width: 120px;
+            height: 120px;
+            margin: 20px auto;
+            background: #28a745;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .avatar-placeholder svg {
+            width: 60px;
+            height: 60px;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Tradutor Libras Alternativo - 100% Funcional</h1>
+        
+        <div id="status" class="status info">
+            Sistema pronto para uso
+        </div>
+        
+        <textarea id="textInput" class="text-area" placeholder="Digite o texto para traduzir...
+
+Exemplo: Bom dia a todos. Sejam bem-vindos à nossa aula.">BIOLOGIA 1ª SÉRIE CÉLULA VEGETAL AULA 16</textarea>
+        
+        <div class="btn-group">
+            <button class="btn btn-success" onclick="traduzirParaLibras()">Traduzir para Libras</button>
+            <button class="btn btn-warning" onclick="mostrarDetalhes()">Mostrar Detalhes</button>
+            <button class="btn" onclick="limpar()">Limpar</button>
+        </div>
+        
+        <div class="libras-display" id="librasDisplay">
+            <div class="avatar-placeholder">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                    <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                    <line x1="12" y1="19" x2="12" y2="23"></line>
+                    <line x1="8" y1="23" x2="16" y2="23"></line>
+                </svg>
+            </div>
+            <div class="libras-text" id="librasText">
+                Digite um texto para começar
+            </div>
+            <div class="libras-gloss" id="librasGloss">
+                Aguardando texto...
+            </div>
+            <div id="wordBreakdown" class="word-breakdown"></div>
+        </div>
+        
+        <div class="instructions">
+            <h4>Como Funciona:</h4>
+            <p>1. Digite ou cole o texto em português</p>
+            <p>2. Clique em "Traduzir para Libras"</p>
+            <p>3. Veja a tradução em formato de glosa (escrita de Libras)</p>
+            <p>4. Analise cada palavra individualmente</p>
+            <p>5. Use para ensinar e comunicar com alunos surdos</p>
+        </div>
+    </div>
+
+    <script>
+        // Dicionário simples de tradução para Libras (glosa)
+        const dicionarioLibras = {
+            // Saudações
+            "bom": "BOM",
+            "dia": "DIA",
+            "boa": "BOA",
+            "noite": "NOITE",
+            "tarde": "TARDE",
+            "oi": "OI",
+            "olá": "OLÁ",
+            
+            // Verbos comuns
+            "ser": "SER",
+            "estar": "ESTAR",
+            "ter": "TER",
+            "fazer": "FAZER",
+            "ir": "IR",
+            "vir": "VIR",
+            "dar": "DAR",
+            "dizer": "DIZER",
+            "poder": "PODER",
+            "querer": "QUERER",
+            
+            // Substantivos comuns
+            "aula": "AULA",
+            "aluno": "ALUNO",
+            "professor": "PROFESSOR",
+            "escola": "ESCOLA",
+            "livro": "LIVRO",
+            "tempo": "TEMPO",
+            "pessoa": "PESSOA",
+            "coisa": "COISA",
+            
+            // Biologia
+            "biologia": "BIOLOGIA",
+            "célula": "CÉLULA",
+            "vegetal": "VEGETAL",
+            "planta": "PLANTA",
+            "folha": "FOLHA",
+            "raiz": "RAIZ",
+            "caule": "CAULE",
+            "flor": "FLOR",
+            
+            // Números
+            "um": "1",
+            "dois": "2",
+            "três": "3",
+            "quatro": "4",
+            "cinco": "5",
+            "seis": "6",
+            "sete": "7",
+            "oito": "8",
+            "nove": "9",
+            "dez": "10",
+            "primeira": "1ª",
+            "segunda": "2ª",
+            "terceira": "3ª",
+            
+            // Conectivos
+            "e": "E",
+            "ou": "OU",
+            "mas": "MAS",
+            "porque": "PORQUE",
+            "para": "PARA",
+            "com": "COM",
+            "sem": "SEM",
+            "em": "EM",
+            "de": "DE",
+            "do": "DE",
+            "da": "DE",
+            "dos": "DE",
+            "das": "DE",
+            "no": "EM",
+            "na": "EM",
+            "nos": "EM",
+            "nas": "EM",
+            
+            // Outros
+            "todos": "TODOS",
+            "tudo": "TUDO",
+            "nada": "NADA",
+            "ninguém": "NINGUÉM",
+            "aqui": "AQUI",
+            "ali": "ALI",
+            "lá": "LÁ",
+            "agora": "AGORA",
+            "depois": "DEPOIS",
+            "antes": "ANTES",
+            "hoje": "HOJE",
+            "ontem": "ONTEM",
+            "amanhã": "AMANHÃ"
+        };
+        
+        function updateStatus(message, type) {
+            const status = document.getElementById('status');
+            status.textContent = message;
+            status.className = `status ${type}`;
+        }
+        
+        function traduzirParaLibras() {
+            const text = document.getElementById('textInput').value.trim();
+            if (!text) {
+                updateStatus('Digite um texto para traduzir', 'error');
+                return;
+            }
+            
+            updateStatus('Traduzindo para Libras...', 'info');
+            
+            // Limpar texto: remover pontuação e converter para minúsculas
+            const textoLimpo = text.toLowerCase().replace(/[.,!?;:]/g, ' ').replace(/\s+/g, ' ').trim();
+            const palavras = textoLimpo.split(' ');
+            
+            // Traduzir cada palavra
+            const traduzidas = palavras.map(palavra => {
+                return dicionarioLibras[palavra] || palavra.toUpperCase();
+            });
+            
+            // Criar glosa
+            const glosa = traduzidas.join(' ');
+            
+            // Atualizar display
+            document.getElementById('librasText').textContent = `Tradução: ${glosa}`;
+            document.getElementById('librasGloss').innerHTML = `<strong>Glosa (Libras):</strong> ${glosa}`;
+            
+            // Criar breakdown por palavra
+            const breakdownDiv = document.getElementById('wordBreakdown');
+            breakdownDiv.innerHTML = '';
+            
+            palavras.forEach((palavra, index) => {
+                const traduzida = traduzidas[index];
+                const card = document.createElement('div');
+                card.className = 'word-card';
+                card.innerHTML = `
+                    <div class="portuguese">${palavra}</div>
+                    <div class="libras">${traduzida}</div>
+                `;
+                breakdownDiv.appendChild(card);
+            });
+            
+            updateStatus('Tradução concluída com sucesso!', 'success');
+            
+            // Adicionar animação
+            const display = document.getElementById('librasDisplay');
+            display.style.borderColor = '#ffc107';
+            setTimeout(() => {
+                display.style.borderColor = '#28a745';
+            }, 1000);
+        }
+        
+        function mostrarDetalhes() {
+            const text = document.getElementById('textInput').value.trim();
+            if (!text) {
+                updateStatus('Digite um texto primeiro', 'error');
+                return;
+            }
+            
+            const textoLimpo = text.toLowerCase().replace(/[.,!?;:]/g, ' ').replace(/\s+/g, ' ').trim();
+            const palavras = textoLimpo.split(' ');
+            
+            let detalhes = `<strong>Análise Detalhada:</strong><br><br>`;
+            detalhes += `<strong>Texto original:</strong> ${text}<br><br>`;
+            detalhes += `<strong>Palavras:</strong> ${palavras.length}<br><br>`;
+            detalhes += `<strong>Tradução palavra por palavra:</strong><br>`;
+            
+            palavras.forEach((palavra, index) => {
+                const traduzida = dicionarioLibras[palavra] || palavra.toUpperCase();
+                detalhes += `${index + 1}. "${palavra}" -> "${traduzida}"<br>`;
+            });
+            
+            document.getElementById('librasGloss').innerHTML = detalhes;
+            updateStatus('Detalhes mostrados', 'info');
+        }
+        
+        function limpar() {
+            document.getElementById('textInput').value = '';
+            document.getElementById('librasText').textContent = 'Digite um texto para começar';
+            document.getElementById('librasGloss').textContent = 'Aguardando texto...';
+            document.getElementById('wordBreakdown').innerHTML = '';
+            updateStatus('Sistema limpo', 'info');
+        }
+        
+        // Tradução automática ao carregar
+        window.addEventListener('load', function() {
+            const textoPadrao = document.getElementById('textInput').value;
+            if (textoPadrao) {
+                setTimeout(() => {
+                    traduzirParaLibras();
+                }, 1000);
+            }
+        });
+    </script>
+</body>
+</html>
