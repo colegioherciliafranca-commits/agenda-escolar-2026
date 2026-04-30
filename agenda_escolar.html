@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agenda Escolar 2026 - Colégio Estadual Profª Hercília F do Nascimento</title>
+    <script src="https://cdn.jsdelivr.net/npm/appwrite@13.0.0"></script>
     <style>
         * {
             margin: 0;
@@ -785,7 +786,20 @@
                           'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
         const weekDays = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
 
-        function initCalendar() {
+        async function initCalendar() {
+            // Load events from Appwrite
+            const appwriteEvents = await loadEventsFromAppwrite();
+            
+            // Merge with localStorage for backward compatibility
+            const savedEvents = localStorage.getItem('schoolEvents');
+            if (savedEvents) {
+                const localEvents = JSON.parse(savedEvents);
+                // Merge events, giving priority to Appwrite
+                events = { ...localEvents, ...appwriteEvents };
+            } else {
+                events = appwriteEvents;
+            }
+            
             document.getElementById('monthSelect').value = currentMonth;
             renderCalendar();
         }
@@ -1013,10 +1027,15 @@
             const input = meetingItem.querySelector('.meeting-input');
             input.focus();
             
-            input.addEventListener('blur', () => {
+            input.addEventListener('blur', async () => {
                 const value = input.value.trim();
                 if (value) {
                     events[dateStr][events[dateStr].length - 1].title = value;
+                    // Save to Appwrite
+                    const response = await saveEventToAppwrite(dateStr, value);
+                    if (response) {
+                        events[dateStr][events[dateStr].length - 1].id = response.$id;
+                    }
                     localStorage.setItem('schoolEvents', JSON.stringify(events));
                 } else {
                     events[dateStr].pop();
@@ -1069,8 +1088,15 @@
             });
         }
 
-        function deleteMeeting(dateStr, index) {
+        async function deleteMeeting(dateStr, index) {
             if (!events[dateStr]) return;
+            
+            const meeting = events[dateStr][index];
+            
+            // Delete from Appwrite if it has an ID
+            if (meeting.id) {
+                await deleteEventFromAppwrite(meeting.id);
+            }
             
             events[dateStr].splice(index, 1);
             
@@ -1115,6 +1141,87 @@
                 closeModal();
             }
         });
+
+        // Configuração Appwrite
+        const client = new Appwrite();
+        client
+            .setEndpoint('https://nyc.cloud.appwrite.io/v1')
+            .setProject('agenda-escolar-2026');
+
+        const databases = new Appwrite.Databases(client);
+        
+        // IDs corretos do Appwrite
+        const DATABASE_ID = '69f38f600004d1b7c5ce';
+        const COLLECTION_ID = 'eventos';
+
+        // Funções Appwrite para sincronização
+        async function loadEventsFromAppwrite() {
+            try {
+                const response = await databases.listDocuments(
+                    DATABASE_ID, 
+                    COLLECTION_ID
+                );
+                
+                const appwriteEvents = {};
+                response.documents.forEach(doc => {
+                    const date = doc.data;
+                    if (!appwriteEvents[date]) {
+                        appwriteEvents[date] = [];
+                    }
+                    appwriteEvents[date].push({
+                        id: doc.$id,
+                        title: doc.texto,
+                        created: doc.criadoEm
+                    });
+                });
+                
+                return appwriteEvents;
+            } catch (error) {
+                console.error('Erro ao carregar eventos do Appwrite:', error);
+                return {};
+            }
+        }
+
+        async function saveEventToAppwrite(date, title) {
+            try {
+                const response = await databases.createDocument(
+                    DATABASE_ID,
+                    COLLECTION_ID,
+                    Appwrite.ID.unique(),
+                    {
+                        data: date,
+                        texto: title,
+                        criadoEm: new Date().toISOString()
+                    }
+                );
+                return response;
+            } catch (error) {
+                console.error('Erro ao salvar evento no Appwrite:', error);
+                return null;
+            }
+        }
+
+        async function deleteEventFromAppwrite(eventId) {
+            try {
+                await databases.deleteDocument(DATABASE_ID, COLLECTION_ID, eventId);
+                return true;
+            } catch (error) {
+                console.error('Erro ao deletar evento do Appwrite:', error);
+                return false;
+            }
+        }
+
+        async function updateEventInAppwrite(eventId, title) {
+            try {
+                await databases.updateDocument(DATABASE_ID, COLLECTION_ID, eventId, {
+                    texto: title
+                });
+                return true;
+            } catch (error) {
+                console.error('Erro ao atualizar evento no Appwrite:', error);
+                return false;
+            }
+        }
 
         // Initialize calendar when page loads
         document.addEventListener('DOMContentLoaded', initCalendar);
