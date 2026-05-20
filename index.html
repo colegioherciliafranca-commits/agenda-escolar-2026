@@ -346,21 +346,30 @@
             display: inline-block;
         }
 
-        .meeting-item {
-            background: rgba(0, 206, 209, 0.1);
-            border: 1px solid rgba(0, 206, 209, 0.3);
-            border-radius: 4px;
-            padding: 2px 4px;
-            margin: 2px 0;
-            font-size: 0.75em;
-            cursor: pointer;
-            transition: all 0.2s;
-            position: relative;
+                .meeting-item {
+            background: #fff9c4 !important;
+            border: 2px solid #fbc02d !important;
+            color: #000 !important;
+            border-radius: 4px !important;
+            padding: 5px 10px !important;
+            margin: 5px 0 !important;
+            font-size: 14px !important; /* Fixed pixel size for clarity */
+            font-weight: 900 !important;
+            cursor: pointer !important;
+            transition: all 0.2s !important;
+            position: relative !important;
+            box-shadow: 3px 3px 6px rgba(0,0,0,0.4) !important;
+            word-break: break-word !important;
+            line-height: 1.4 !important;
+            text-transform: uppercase !important;
+            display: block !important; /* Ensure it's visible */
+            min-height: 20px !important;
         }
 
         .meeting-item:hover {
-            background: rgba(0, 206, 209, 0.2);
-            border-color: rgba(0, 206, 209, 0.5);
+            background: #fff176;
+            transform: scale(1.02);
+            z-index: 5;
         }
 
         .meeting-item.editing {
@@ -372,11 +381,12 @@
         .meeting-input {
             width: 100%;
             border: none;
-            background: transparent;
-            font-size: 0.75em;
+            background: white;
+            font-size: 1em;
             padding: 2px;
-            outline: none;
+            outline: 2px solid #fbc02d;
             font-family: inherit;
+            color: #000;
         }
 
         .meeting-delete {
@@ -1151,6 +1161,14 @@
             localStorage.removeItem('schoolEvents');
             
             document.getElementById('monthSelect').value = currentMonth;
+            
+            // Fallback for testing visibility if Appwrite is empty
+            if (Object.keys(events).length === 0) {
+                const today = new Date();
+                const dateStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+                events[dateStr] = [{title: 'TESTE DE VISIBILIDADE', description: 'Nota adesiva', type: 'cyan'}];
+            }
+
             renderCalendar();
         }
 
