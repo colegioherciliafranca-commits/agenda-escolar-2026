@@ -588,13 +588,9 @@
                 font-size: 0.8em;
             }
         }
-
-/* --- BLOCO DE ALERTAS --- */@keyframes alert-blink {    0% { background-color: rgba(220, 20, 60, 0.95); }    50% { background-color: rgba(220, 20, 60, 0.6); }    100% { background-color: rgba(220, 20, 60, 0.95); }}.alert-overlay {    display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;    z-index: 9999; flex-direction: column; justify-content: center; align-items: center;    color: white; text-align: center; animation: alert-blink 0.8s infinite; padding: 20px;}.alert-content { background: rgba(0, 0, 0, 0.85); padding: 50px; border-radius: 30px; border: 4px solid white; max-width: 90%; }.alert-message { font-size: 3.5em; font-weight: 900; margin-bottom: 20px; }.alert-event-name { font-size: 2.5em; color: #FFD700; margin-bottom: 20px; }.alert-close-btn { padding: 15px 40px; font-size: 1.5em; cursor: pointer; font-weight: bold; border-radius: 10px; border: none; background: white; color: #DC143C; }.alert-status-bar { position: fixed; bottom: 10px; right: 10px; background: rgba(0,0,0,0.8); color: white; padding: 10px 20px; border-radius: 30px; font-size: 14px; z-index: 500; cursor: pointer; border: 2px solid #FFD700; }
     </style>
 </head>
 <body>
-<div id="alertOverlay" class="alert-overlay">    <div class="alert-content">        <div style="font-size: 100px;">⚠️</div>        <div class="alert-message">ALERTA DE REUNIÃO!</div>        <div id="alertEventName" class="alert-event-name">NOME DA REUNIÃO</div>        <div style="font-size: 1.5em; margin-bottom: 30px;">Inicia em 10 minutos</div>        <button class="alert-close-btn" onclick="closeAlertOverlay()">FECHAR E PARAR SOM</button>    </div></div><div id="alertStatus" class="alert-status-bar" onclick="enableAudio()">    🔔 SOM: <span id="audioStatusText">DESATIVADO (CLIQUE AQUI)</span></div>
-
     <div class="container">
         <div class="header">
             <div class="banner-content">
@@ -708,11 +704,13 @@
             <div class="calendar">
                 <div class="calendar-header" id="calendarHeader">Janeiro 2026</div>
                 <div class="calendar-grid" id="calendarGrid">
-                    </div>
+                    <!-- Calendar will be generated here -->
+                </div>
             </div>
         </div>
     </div>
 
+    <!-- Modal for adding/editing events -->
     <div id="eventModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -752,7 +750,8 @@
                 </div>
             </form>
             <div class="event-list" id="eventList">
-                </div>
+                <!-- Events will be listed here -->
+            </div>
         </div>
     </div>
 
@@ -1572,10 +1571,4 @@
         async function deleteEventFromAppwrite(eventId) {
             try {
                 await databases.deleteDocument(DATABASE_ID, COLLECTION_ID, eventId);
-            } catch(e) {}
-        }
-
-// --- LÓGICA DE ALERTAS ---let alerted1Hour = new Set();let alerted10Min = new Set();let audioEnabled = false;let alertInterval = null;function extractTime(text) {    const regex = /([01]?\d|2[0-3])[:hHsS\s]{1,3}([0-5]\d)?/i;    const match = text.match(regex);    return match ? { hours: parseInt(match[1]), minutes: match[2] ? parseInt(match[2]) : 0 } : null;}function checkAlerts() {    const now = new Date();    const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;    const todayMeetings = events[todayStr] || [];    todayMeetings.forEach(m => {        const time = extractTime(m.title);        if (!time) return;        const eventDate = new Date(now);        eventDate.setHours(time.hours, time.minutes, 0, 0);        const diffMin = Math.floor((eventDate - now) / 60000);        if (diffMin > 58 && diffMin <= 61 && !alerted1Hour.has(m.id)) {            beep(440, 1); alerted1Hour.add(m.id);        }        if (diffMin > 8 && diffMin <= 11 && !alerted10Min.has(m.id)) {            alerted10Min.add(m.id); showAlert(m.title);        }    });}function beep(freq, dur) {    if (!audioEnabled) return;    try {        const ctx = new (window.AudioContext || window.webkitAudioContext)();        const osc = ctx.createOscillator();        const gain = ctx.createGain();        osc.frequency.value = freq;        osc.connect(gain); gain.connect(ctx.destination);        gain.gain.setValueAtTime(0.2, ctx.currentTime);        osc.start(); osc.stop(ctx.currentTime + dur);    } catch(e) {}}function showAlert(name) {    document.getElementById('alertEventName').textContent = name;    document.getElementById('alertOverlay').style.display = 'flex';    if (alertInterval) clearInterval(alertInterval);    const playSound = () => { beep(660, 0.2); setTimeout(() => beep(880, 0.3), 250); };    playSound();    alertInterval = setInterval(playSound, 3000);}function closeAlertOverlay() {    document.getElementById('alertOverlay').style.display = 'none';    if (alertInterval) { clearInterval(alertInterval); alertInterval = null; }}function enableAudio() {    audioEnabled = true;    document.getElementById('audioStatusText').textContent = "ATIVADO ✅";    document.getElementById('alertStatus').style.background = "#4caf50";    beep(440, 0.1);}// Iniciar verificador automáticosetInterval(checkAlerts, 30000);
-    </script>
-</body>
-</html>
+       
