@@ -1571,4 +1571,27 @@
         async function deleteEventFromAppwrite(eventId) {
             try {
                 await databases.deleteDocument(DATABASE_ID, COLLECTION_ID, eventId);
-       
+                return true;
+            } catch (error) {
+                console.error('Erro ao deletar evento do Appwrite:', error);
+                return false;
+            }
+        }
+
+        async function updateEventInAppwrite(eventId, title) {
+            try {
+                await databases.updateDocument(DATABASE_ID, COLLECTION_ID, eventId, {
+                    texto: title
+                });
+                return true;
+            } catch (error) {
+                console.error('Erro ao atualizar evento no Appwrite:', error);
+                return false;
+            }
+        }
+
+        // Initialize calendar when page loads
+        document.addEventListener('DOMContentLoaded', initCalendar);
+    </script>
+</body>
+</html>
