@@ -1542,7 +1542,9 @@
             try {
                 const response = await databases.listDocuments(
                     DATABASE_ID,
-                    COLLECTION_ID
+                    COLLECTION_ID,
+                    [],
+                    100 // Aumentar limite para 100 documentos
                 );
 
                 console.log('Resposta do Appwrite (loadEvents):', response);
