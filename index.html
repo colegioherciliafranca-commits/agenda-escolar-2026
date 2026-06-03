@@ -1162,13 +1162,6 @@
             
             document.getElementById('monthSelect').value = currentMonth;
             
-            // Fallback for testing visibility if Appwrite is empty
-            if (Object.keys(events).length === 0) {
-                const today = new Date();
-                const dateStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
-                events[dateStr] = [{title: 'TESTE DE VISIBILIDADE', description: 'Nota adesiva', type: 'cyan'}];
-            }
-
             renderCalendar();
         }
 
@@ -1424,7 +1417,7 @@
             meetingContainer.appendChild(meetingItem);
         }
 
-        function editMeetingInline(meetingItem, dateStr, index) {
+        async function editMeetingInline(meetingItem, dateStr, index) {
             const currentText = meetingItem.querySelector('.meeting-text').textContent;
             meetingItem.classList.add('editing');
             meetingItem.innerHTML = `
@@ -1436,11 +1429,14 @@
             input.focus();
             input.select();
             
-            input.addEventListener('blur', () => {
+            input.addEventListener('blur', async () => {
                 const value = input.value.trim();
                 if (value) {
                     events[dateStr][index].title = value;
-                    localStorage.setItem('schoolEvents', JSON.stringify(events));
+                    // Update in Appwrite if it has an ID
+                    if (events[dateStr][index].id) {
+                        await updateEventInAppwrite(events[dateStr][index].id, value);
+                    }
                 } else {
                     deleteMeeting(dateStr, index);
                 }
@@ -1581,7 +1577,7 @@
         async function updateEventInAppwrite(eventId, title) {
             try {
                 await databases.updateDocument(DATABASE_ID, COLLECTION_ID, eventId, {
-                    texto: title
+                    titulo: title
                 });
                 return true;
             } catch (error) {
