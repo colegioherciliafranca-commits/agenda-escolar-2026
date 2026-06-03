@@ -1205,6 +1205,10 @@
                 const holiday = calendarData.holidays[dateStr];
                 const schoolEvent = calendarData.schoolEvents[dateStr];
                 const userEvents = events[dateStr] || [];
+                
+                if (userEvents.length > 0) {
+                    console.log(`Renderizando dia ${dateStr} com ${userEvents.length} eventos:`, userEvents);
+                }
 
                 if (holiday) {
                     dayElement.classList.add(`color-${holiday.type}`);
@@ -1391,19 +1395,30 @@
             
             input.addEventListener('blur', async () => {
                 const value = input.value.trim();
+                console.log('Blur - valor:', value, 'dateStr:', dateStr);
                 if (value) {
+                    if (!events[dateStr]) {
+                        events[dateStr] = [];
+                    }
                     events[dateStr][events[dateStr].length - 1].title = value;
+                    console.log('Antes de salvar no Appwrite - events[dateStr]:', events[dateStr]);
                     // Save to Appwrite only
                     const response = await saveEventToAppwrite(dateStr, value);
+                    console.log('Resposta do Appwrite:', response);
                     if (response) {
                         events[dateStr][events[dateStr].length - 1].id = response.$id;
+                        console.log('ID adicionado:', response.$id);
+                        console.log('Após salvar - events[dateStr]:', events[dateStr]);
                     }
                 } else {
-                    events[dateStr].pop();
-                    if (events[dateStr].length === 0) {
-                        delete events[dateStr];
+                    if (events[dateStr]) {
+                        events[dateStr].pop();
+                        if (events[dateStr].length === 0) {
+                            delete events[dateStr];
+                        }
                     }
                 }
+                console.log('Antes de renderCalendar - events:', events);
                 renderCalendar();
             });
             
@@ -1418,7 +1433,12 @@
         }
 
         async function editMeetingInline(meetingItem, dateStr, index) {
-            const currentText = meetingItem.querySelector('.meeting-text').textContent;
+            const textElement = meetingItem.querySelector('.meeting-text');
+            if (!textElement) {
+                console.error('Elemento .meeting-text não encontrado');
+                return;
+            }
+            const currentText = textElement.textContent;
             meetingItem.classList.add('editing');
             meetingItem.innerHTML = `
                 <input type="text" class="meeting-input" value="${currentText}">
@@ -1521,13 +1541,18 @@
         async function loadEventsFromAppwrite() {
             try {
                 const response = await databases.listDocuments(
-                    DATABASE_ID, 
+                    DATABASE_ID,
                     COLLECTION_ID
                 );
-                
+
+                console.log('Resposta do Appwrite (loadEvents):', response);
+                console.log('Total de documentos:', response.documents.length);
+                console.log('Documentos:', response.documents);
+
                 const appwriteEvents = {};
                 response.documents.forEach(doc => {
                     const date = doc.data;
+                    console.log('Processando documento:', doc);
                     if (!appwriteEvents[date]) {
                         appwriteEvents[date] = [];
                     }
@@ -1537,7 +1562,8 @@
                         created: doc.criadoEm
                     });
                 });
-                
+
+                console.log('Eventos carregados do Appwrite:', appwriteEvents);
                 return appwriteEvents;
             } catch (error) {
                 console.error('Erro ao carregar eventos do Appwrite:', error);
